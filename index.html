@@ -15,7 +15,7 @@
     }
 
     input[type="text"] {
-      width: 50px; /* Breite der Textfelder anpassen */
+      width: 50px;
     }
 
     #incomingMIDI {
@@ -42,7 +42,50 @@
     <input type="text" id="sysexByte2" value="0" oninput="updateSysExByte(2)">
   </div>
 
-  <!-- Weitere Textfelder für die anderen SysEx-Bytes hier einfügen -->
+  <div>
+    <label for="sysexByte3">SysEx Byte 3:</label>
+    <input type="text" id="sysexByte3" value="0" oninput="updateSysExByte(3)">
+  </div>
+
+  <div>
+    <label for="sysexByte4">SysEx Byte 4:</label>
+    <input type="text" id="sysexByte4" value="0" oninput="updateSysExByte(4)">
+  </div>
+
+  <div>
+    <label for="sysexByte5">SysEx Byte 5:</label>
+    <input type="text" id="sysexByte5" value="0" oninput="updateSysExByte(5)">
+  </div>
+
+  <div>
+    <label for="sysexByte6">SysEx Byte 6:</label>
+    <input type="text" id="sysexByte6" value="0" oninput="updateSysExByte(6)">
+  </div>
+
+  <div>
+    <label for="sysexByte7">SysEx Byte 7:</label>
+    <input type="text" id="sysexByte7" value="0" oninput="updateSysExByte(7)">
+  </div>
+
+  <div>
+    <label for="sysexByte8">SysEx Byte 8:</label>
+    <input type="text" id="sysexByte8" value="0" oninput="updateSysExByte(8)">
+  </div>
+
+  <div>
+    <label for="sysexByte9">SysEx Byte 9:</label>
+    <input type="text" id="sysexByte9" value="0" oninput="updateSysExByte(9)">
+  </div>
+
+  <div>
+    <label for="sysexByte10">SysEx Byte 10:</label>
+    <input type="text" id="sysexByte10" value="0" oninput="updateSysExByte(10)">
+  </div>
+
+  <div>
+    <label for="sysexByte11">SysEx Byte 11:</label>
+    <input type="text" id="sysexByte11" value="0" oninput="updateSysExByte(11)">
+  </div>
 </div>
 
 <button onclick="sendSysEx()">Send SysEx Message</button>
@@ -71,65 +114,4 @@
         }
       })
       .catch(function(error) {
-        document.getElementById('status').innerText = 'MIDI-Zugriff fehlgeschlagen: ' + error;
-        document.getElementById('deviceName').innerText = '';
-      });
-  }
-
-  function updateSysExByte(byteNumber) {
-    const valueElement = document.getElementById(`sysexByte${byteNumber}`);
-    const intValue = parseInt(valueElement.value);
-    if (isNaN(intValue)) {
-      alert('Bitte geben Sie eine gültige Zahl ein.');
-      valueElement.value = 0;
-    } else {
-      // Optional: Begrenzen Sie den Wertebereich hier, z.B. zwischen 0 und 255
-      // intValue = Math.min(Math.max(intValue, 0), 255);
-      valueElement.value = intValue;
-    }
-  }
-
-  function sendSysEx() {
-    navigator.requestMIDIAccess()
-      .then(function(access) {
-        const outputs = access.outputs.values();
-        const device = outputs.next().value;
-
-        if (device) {
-          // Byte-Werte aus den Textfeldern abrufen
-          const byte1 = document.getElementById('sysexByte1').value;
-          const byte2 = document.getElementById('sysexByte2').value;
-          // Hier weitere Bytes hinzufügen, falls benötigt
-
-          // Beispiel SysEx-Nachricht (Start Byte, Geräte-ID, SysEx-Daten, End Byte)
-          const sysExMessage = [0xF0, byte1, byte2, 0xF7];
-
-          // SysEx-Nachricht senden
-          device.send(sysExMessage);
-          console.log("SysEx message sent:", sysExMessage);
-        } else {
-          console.error("No MIDI output device found.");
-        }
-      })
-      .catch(function(error) {
-        console.error("MIDI access failed", error);
-      });
-  }
-
-  // Funktion zur Anzeige eingehender MIDI-Nachrichten
-  function onMIDIMessage(event) {
-    const incomingMIDIList = document.getElementById('incomingMIDI');
-    const listItem = document.createElement('li');
-    listItem.textContent = `Status: 0x${event.data[0].toString(16)}, Data: [${event.data.slice(1).join(', ')}]`;
-    incomingMIDIList.appendChild(listItem);
-
-    // Scrollen Sie nach unten, um die neueste Nachricht anzuzeigen
-    incomingMIDIList.scrollTop = incomingMIDIList.scrollHeight;
-  }
-
-  // Überprüfen Sie beim Laden der Seite sofort die Verfügbarkeit von MIDI
-  checkMIDIAvailability();
-</script>
-
-</body>
-</html>
+        document.getElementById('status').innerText = 'MIDI-Zugriff fehl
