@@ -114,4 +114,67 @@
         }
       })
       .catch(function(error) {
-        document.getElementById('status').innerText = 'MIDI-Zugriff fehl
+        document.getElementById('status').innerText = 'MIDI-Zugriff fehlgeschlagen: ' + error;
+        document.getElementById('deviceName').innerText = '';
+      });
+  }
+
+  function updateSysExByte(byteNumber) {
+    const valueElement = document.getElementById(`sysexByte${byteNumber}`);
+    const intValue = parseInt(valueElement.value);
+    if (isNaN(intValue)) {
+      alert('Bitte geben Sie eine gültige Zahl ein.');
+      valueElement.value = 0;
+    } else {
+      // Optional: Begrenzen Sie den Wertebereich hier, z.B. zwischen 0 und 255
+      // intValue = Math.min(Math.max(intValue, 0), 255);
+      valueElement.value = intValue;
+    }
+  }
+
+  function sendSysEx() {
+    navigator.requestMIDIAccess()
+      .then(function(access) {
+        const outputs = access.outputs.values();
+        const device = outputs.next().value;
+
+        if (device) {
+          // Byte-Werte aus den Textfeldern abrufen
+          const bytes = [];
+          for (let i = 1; i <= 11; i++) {
+            const byteValue = parseInt(document.getElementById(`sysexByte${i}`).value);
+            bytes.push(isNaN(byteValue) ? 0 : byteValue);
+          }
+
+          // Beispiel SysEx-Nachricht (Start Byte, Geräte-ID, SysEx-Daten, End Byte)
+          const sysExMessage = [0xF0, ...bytes, 0xF7];
+
+          // SysEx-Nachricht senden
+          device.send(sysExMessage);
+          console.log("SysEx message sent:", sysExMessage);
+        } else {
+          console.error("No MIDI output device found.");
+        }
+      })
+      .catch(function(error) {
+        console.error("MIDI access failed", error);
+      });
+  }
+
+  // Funktion zur Anzeige eingehender MIDI-Nachrichten
+  function onMIDIMessage(event) {
+    const incomingMIDIList = document.getElementById('incomingMIDI');
+    const listItem = document.createElement('li');
+    listItem.textContent = `Status: 0x${event.data[0].toString(16)}, Data: [${event.data.slice(1).join(', ')}]`;
+    incomingMIDIList.appendChild(listItem);
+
+    // Scrollen Sie nach unten, um die neueste Nachricht anzuzeigen
+    incomingMIDIList.scrollTop = incomingMIDIList.scrollHeight;
+  }
+
+  // Überprüfen Sie beim Laden der Seite sofort die Verfügbarkeit von MIDI
+  checkMIDIAvailability();
+</script>
+
+</body>
+</html>
