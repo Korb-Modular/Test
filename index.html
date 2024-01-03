@@ -10,13 +10,18 @@
     }
 
     input[type="range"] {
-      width: 100%;
-      margin-bottom: 10px;
+      width: 20px; /* Festlegen der Breite für senkrechte Ausrichtung */
+      height: 150px; /* Festlegen der Höhe */
+      margin-right: 10px; /* Abstand zwischen den Schiebereglern */
+      writing-mode: bt-lr; /* Senkrechte Ausrichtung */
+      appearance: slider-vertical; /* Festlegen der senkrechten Ausrichtung */
+      transform: rotate(180deg); /* Drehen des Schiebereglers */
     }
 
     #incomingMIDI {
-      max-height: 150px;
-      overflow-y: auto;
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
     }
   </style>
   <title>MIDI SysEx Sender und Empfänger</title>
