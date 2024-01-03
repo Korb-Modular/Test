@@ -9,13 +9,17 @@
       margin-bottom: 5px;
     }
 
+    .range-container {
+      display: flex;
+      gap: 10px;
+    }
+
     input[type="range"] {
-      width: 20px; /* Festlegen der Breite für senkrechte Ausrichtung */
-      height: 150px; /* Festlegen der Höhe */
-      margin-right: 10px; /* Abstand zwischen den Schiebereglern */
-      writing-mode: bt-lr; /* Senkrechte Ausrichtung */
-      appearance: slider-vertical; /* Festlegen der senkrechten Ausrichtung */
-      transform: rotate(180deg); /* Drehen des Schiebereglers */
+      width: 150px;
+      height: 20px;
+      writing-mode: bt-lr;
+      appearance: slider-vertical;
+      transform: rotate(180deg);
     }
 
     #incomingMIDI {
@@ -31,15 +35,21 @@
 <p id="status">MIDI-Gerät nicht angeschlossen.</p>
 <p id="deviceName"></p>
 
-<label for="sysexByte1">SysEx Byte 1:</label>
-<input type="range" id="sysexByte1" min="0" max="255" value="0" oninput="updateSysExByte(1)">
-<span id="sysexByte1Value">0</span>
+<div class="range-container">
+  <div>
+    <label for="sysexByte1">SysEx Byte 1:</label>
+    <input type="range" id="sysexByte1" min="0" max="255" value="0" oninput="updateSysExByte(1)">
+    <span id="sysexByte1Value">0</span>
+  </div>
 
-<label for="sysexByte2">SysEx Byte 2:</label>
-<input type="range" id="sysexByte2" min="0" max="255" value="0" oninput="updateSysExByte(2)">
-<span id="sysexByte2Value">0</span>
+  <div>
+    <label for="sysexByte2">SysEx Byte 2:</label>
+    <input type="range" id="sysexByte2" min="0" max="255" value="0" oninput="updateSysExByte(2)">
+    <span id="sysexByte2Value">0</span>
+  </div>
 
-<!-- Weitere Schieberegler für die anderen SysEx-Bytes hier einfügen -->
+  <!-- Weitere Schieberegler für die anderen SysEx-Bytes hier einfügen -->
+</div>
 
 <button onclick="sendSysEx()">Send SysEx Message</button>
 
