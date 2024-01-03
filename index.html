@@ -9,17 +9,13 @@
       margin-bottom: 5px;
     }
 
-    .range-container {
+    .input-container {
       display: flex;
       gap: 10px;
     }
 
-    input[type="range"] {
-      width: 20px;
-      height: 200px; /* Höhe erhöht */
-      writing-mode: bt-lr;
-      appearance: slider-vertical;
-      transform: rotate(180deg);
+    input[type="text"] {
+      width: 50px; /* Breite der Textfelder anpassen */
     }
 
     #incomingMIDI {
@@ -35,32 +31,18 @@
 <p id="status">MIDI-Gerät nicht angeschlossen.</p>
 <p id="deviceName"></p>
 
-<div class="range-container">
+<div class="input-container">
   <div>
-    <label for="sysexByte1">Potentiometer:</label>
-    <input type="range" id="sysexByte1" min="8" max="1" value="0" oninput="updateSysExByte(1)">
-    <span id="sysexByte1Value">0</span>
+    <label for="sysexByte1">SysEx Byte 1:</label>
+    <input type="text" id="sysexByte1" value="0" oninput="updateSysExByte(1)">
   </div>
 
   <div>
-    <label for="sysexByte2">Midi Channel:</label>
-    <input type="range" id="sysexByte2" min="16" max="1" value="0" oninput="updateSysExByte(2)">
-    <span id="sysexByte2Value">0</span>
+    <label for="sysexByte2">SysEx Byte 2:</label>
+    <input type="text" id="sysexByte2" value="0" oninput="updateSysExByte(2)">
   </div>
 
-  <div>
-    <label for="sysexByte2">CC:</label>
-    <input type="range" id="sysexByte2" min="127" max="0" value="0" oninput="updateSysExByte(3)">
-    <span id="sysexByte2Value">0</span>
-  </div>
-
-  <div>
-    <label for="sysexByte2">Output Mode:</label>
-    <input type="range" id="sysexByte2" min="8" max="1" value="0" oninput="updateSysExByte(4)">
-    <span id="sysexByte2Value">0</span>
-  </div>
-
-  <!-- Weitere Schieberegler für die anderen SysEx-Bytes hier einfügen -->
+  <!-- Weitere Textfelder für die anderen SysEx-Bytes hier einfügen -->
 </div>
 
 <button onclick="sendSysEx()">Send SysEx Message</button>
@@ -95,9 +77,16 @@
   }
 
   function updateSysExByte(byteNumber) {
-    const valueElement = document.getElementById(`sysexByte${byteNumber}Value`);
-    const rangeElement = document.getElementById(`sysexByte${byteNumber}`);
-    valueElement.innerText = rangeElement.value;
+    const valueElement = document.getElementById(`sysexByte${byteNumber}`);
+    const intValue = parseInt(valueElement.value);
+    if (isNaN(intValue)) {
+      alert('Bitte geben Sie eine gültige Zahl ein.');
+      valueElement.value = 0;
+    } else {
+      // Optional: Begrenzen Sie den Wertebereich hier, z.B. zwischen 0 und 255
+      // intValue = Math.min(Math.max(intValue, 0), 255);
+      valueElement.value = intValue;
+    }
   }
 
   function sendSysEx() {
@@ -107,15 +96,13 @@
         const device = outputs.next().value;
 
         if (device) {
-          // Byte-Werte aus den Schiebereglern abrufen
+          // Byte-Werte aus den Textfeldern abrufen
           const byte1 = document.getElementById('sysexByte1').value;
           const byte2 = document.getElementById('sysexByte2').value;
-          const byte3 = document.getElementById('sysexByte3').value;
-          const byte4 = document.getElementById('sysexByte4').value;
           // Hier weitere Bytes hinzufügen, falls benötigt
 
           // Beispiel SysEx-Nachricht (Start Byte, Geräte-ID, SysEx-Daten, End Byte)
-          const sysExMessage = [0xF0, 0xF00, 0xF00, 0xF00, 0xF0A, byte1, byte2, byte3, byte4, 0x00, 0xF7];
+          const sysExMessage = [0xF0, byte1, byte2, 0xF7];
 
           // SysEx-Nachricht senden
           device.send(sysExMessage);
