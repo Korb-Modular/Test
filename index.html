@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIDI SysEx Sender</title>
+</head>
+<body>
+
+<p id="status">MIDI-Gerät nicht angeschlossen.</p>
+<button onclick="sendSysEx()">Send SysEx Message</button>
+
+<script>
+  function checkMIDIAvailability() {
+    navigator.requestMIDIAccess()
+      .then(function(access) {
+        const outputs = access.outputs.values();
+        const device = outputs.next().value;
+
+        if (device) {
+          document.getElementById('status').innerText = 'MIDI-Gerät angeschlossen.';
+        } else {
+          document.getElementById('status').innerText = 'MIDI-Gerät nicht angeschlossen.';
+        }
+      })
+      .catch(function(error) {
+        document.getElementById('status').innerText = 'MIDI-Zugriff fehlgeschlagen: ' + error;
+      });
+  }
+
+  function sendSysEx() {
+    navigator.requestMIDIAccess()
+      .then(function(access) {
+        const outputs = access.outputs.values();
+        const device = outputs.next().value;
+
+        if (device) {
+          // Beispiel SysEx-Nachricht (Start Byte, Geräte-ID, SysEx-Daten, End Byte)
+          const sysExMessage = [0xF0, 0x01, 0x02, 0x03, 0xF7];
+
+          // SysEx-Nachricht senden
+          device.send(sysExMessage);
+          console.log("SysEx message sent:", sysExMessage);
+        } else {
+          console.error("No MIDI output device found.");
+        }
+      })
+      .catch(function(error) {
+        console.error("MIDI access failed", error);
+      });
+  }
+
+  // Überprüfen Sie beim Laden der Seite sofort die Verfügbarkeit von MIDI
+  checkMIDIAvailability();
+</script>
+
+</body>
+</html>
