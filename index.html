@@ -37,14 +37,26 @@
 
 <div class="range-container">
   <div>
-    <label for="sysexByte1">SysEx Byte 1:</label>
-    <input type="range" id="sysexByte1" min="0" max="255" value="0" oninput="updateSysExByte(1)">
+    <label for="sysexByte1">Potentiometer:</label>
+    <input type="range" id="sysexByte1" min="8" max="1" value="0" oninput="updateSysExByte(1)">
     <span id="sysexByte1Value">0</span>
   </div>
 
   <div>
-    <label for="sysexByte2">SysEx Byte 2:</label>
-    <input type="range" id="sysexByte2" min="0" max="255" value="0" oninput="updateSysExByte(2)">
+    <label for="sysexByte2">Midi Channel:</label>
+    <input type="range" id="sysexByte2" min="16" max="1" value="0" oninput="updateSysExByte(2)">
+    <span id="sysexByte2Value">0</span>
+  </div>
+
+  <div>
+    <label for="sysexByte2">CC:</label>
+    <input type="range" id="sysexByte2" min="127" max="0" value="0" oninput="updateSysExByte(3)">
+    <span id="sysexByte2Value">0</span>
+  </div>
+
+  <div>
+    <label for="sysexByte2">Output Mode:</label>
+    <input type="range" id="sysexByte2" min="8" max="1" value="0" oninput="updateSysExByte(4)">
     <span id="sysexByte2Value">0</span>
   </div>
 
@@ -98,10 +110,12 @@
           // Byte-Werte aus den Schiebereglern abrufen
           const byte1 = document.getElementById('sysexByte1').value;
           const byte2 = document.getElementById('sysexByte2').value;
+          const byte3 = document.getElementById('sysexByte3').value;
+          const byte4 = document.getElementById('sysexByte4').value;
           // Hier weitere Bytes hinzufügen, falls benötigt
 
           // Beispiel SysEx-Nachricht (Start Byte, Geräte-ID, SysEx-Daten, End Byte)
-          const sysExMessage = [0xF0, byte1, byte2, 0xF7];
+          const sysExMessage = [0xF0, 0xF00, 0xF00, 0xF00, 0xF0A, byte1, byte2, byte3, byte4, 0x00, 0xF7];
 
           // SysEx-Nachricht senden
           device.send(sysExMessage);
