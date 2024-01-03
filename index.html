@@ -3,6 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    #incomingMIDI {
+      max-height: 150px;
+      overflow-y: auto;
+    }
+  </style>
   <title>MIDI SysEx Sender und Empfänger</title>
 </head>
 <body>
@@ -90,6 +106,9 @@
     const listItem = document.createElement('li');
     listItem.textContent = `Status: 0x${event.data[0].toString(16)}, Data: [${event.data.slice(1).join(', ')}]`;
     incomingMIDIList.appendChild(listItem);
+
+    // Scrollen Sie nach unten, um die neueste Nachricht anzuzeigen
+    incomingMIDIList.scrollTop = incomingMIDIList.scrollHeight;
   }
 
   // Überprüfen Sie beim Laden der Seite sofort die Verfügbarkeit von MIDI
